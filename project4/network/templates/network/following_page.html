@@ -1,0 +1,43 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+{% for i in content_list %}
+    <div class="single_post" id="single_post_{{i.id}}"> 
+        <p><a href="{% url 'user_profile_page' id=i.author.id %}">{{i.author}}</a></p>                 
+        <p>{{i.content}}</p>
+        <p>{{i.time}}</p>
+        {% if user.is_authenticated %}
+
+            <button id="unlike_button_{{i.id}}" onclick="unlikePost({{i.id}})" style="{% if i.id not in liked_posts %} display:none {% endif %}">Unlike</button>
+            <!-- if no like, display like  -->
+
+            <button id="like_button_{{i.id}}" onclick="likePost({{i.id}})" style="{% if i.id in liked_posts %} display:none {% else %} display:block {% endif %} ">Like</button>
+            <!-- else if yes like, display unlike  -->
+
+        {% endif %}
+    </div>    
+{% endfor %}
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        {% for i in page_obj.paginator.page_range %}
+        
+            <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+        {%endfor%}
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}

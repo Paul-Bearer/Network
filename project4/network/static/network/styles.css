@@ -1,0 +1,42 @@
+.new_post_div {
+    border: 2px solid red;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    
+}
+
+/* this h1 is set for all h1... must alter if another h1 is added */
+h1 {
+    margin-left: 10px;
+}
+
+.new_post_form {
+    border: lightgray solid 1px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    max-width: 50%;
+    margin-left: 10px;
+}
+
+.new_post_form button {
+    margin-top: 2px;
+    width: 15%;
+}
+
+.new_post_form button:hover {
+    text-decoration: underline;
+    color: rgb(201, 199, 199)
+}
+
+.single_post {
+    border: lightgray solid 1px;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 3;
+  margin: 0;
+}
+

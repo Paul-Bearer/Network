@@ -1,0 +1,73 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+
+<h1>{{user_profile}}</h1>
+<h2>Followers = {{followers}}</h2>
+<h2>Following = {{following}}</h2>
+
+<!-- if the user is different the user_profile....... proceed with code -->
+{% if user != user_profile  %}
+
+    {% if user.is_authenticated %}
+        {% if is_following %}
+            <a class="btn btn-secondary" id="unfollow_button" href="{% url 'delete_follow' target_id=user_profile.id %}">Unfollow</a>
+        {% else %}
+            <a class="btn btn-primary" id="follow_button" href="{% url 'add_follow' target_id=user_profile.id %}">Follow</a>
+        {% endif %}
+    {% endif %}
+<!-- If the user is the same as the user_profile...... do nothing -->
+{% endif %}
+
+
+    {% for i in posts_by_user %}
+        <div class="single_post" id="single_post_{{i.id}}"> 
+            <p>{{i.author}}</p>
+            <p id="post_content_{{ i.id }}">{{i.content}}</p>
+            <p>{{i.time}}</p>
+            {% if user == i.author %}
+                <button id="edit_button_{{i.id}}" class="btn btn-primary" onclick="editPost({{i.id}}, '{{i.content}}')">Edit</button>
+            {% else %}
+                {% if user.is_authenticated %}
+
+                    <button id="unlike_button_{{i.id}}" onclick="unlikePost({{i.id}})" style="{% if i.id not in liked_posts %} display:none {% endif %}">Unlike</button>
+                <!-- if no like, display like  -->
+
+                    <button id="like_button_{{i.id}}" onclick="likePost({{i.id}})" style="{% if i.id in liked_posts %} display:none {% else %} display:block {% endif %} ">Like</button>
+                <!-- else if yes like, display unlike  -->
+
+                {% endif %}
+            {% endif %}
+            
+
+            
+        </div>
+    {% endfor %}
+
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {% for i in page_obj.paginator.page_range %}
+            
+                <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+            {%endfor%}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}
